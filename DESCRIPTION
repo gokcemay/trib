@@ -11,4 +11,4 @@ Description: Tribology test devices such as pin-on-disk, ball-on-disk machines a
 License: GPL-3
 LazyData: TRUE
 Imports: zoo
-URL: http://www.gmay.me
+URL: https://github.com/gokcemay/trib

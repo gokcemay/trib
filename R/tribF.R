@@ -24,6 +24,7 @@
 #'   name is given at output for ease of use.
 #' @param DataFF logical scalar, checking whether to use CSV style for
 #'   Tribometer of Profilometer
+#' @param DEncode is a string that specifies file encoding for import
 #'
 #' @return returns truncated file names, also generates list All and filenames
 #'   vector
@@ -45,12 +46,12 @@
 
 #Get sample names and import CSV
 
-trib.names <- function(x,DataFF=TRUE) {   #give file name length returns names of files generates Global var All, l_All and filenames
+trib.names <- function(x,DataFF=TRUE,DEncode="UTF-8") {   #give file name length returns names of files generates Global var All, l_All and filenames
   filenames <<- list.files(pattern="*.csv")
 
   if (DataFF){
   All <<- lapply(filenames,function(i){
-    read.csv(i, sep = "",quote = "\"", dec = ",", fill = TRUE, comment.char = "")
+    read.csv(i, sep = "",quote = "\"", dec = ",", fill = TRUE, comment.char = "",encoding=DEncode)
   })
   l_All <<- length(All)
 
@@ -58,7 +59,7 @@ trib.names <- function(x,DataFF=TRUE) {   #give file name length returns names o
   else {
     filenames <- list.files(pattern="*.csv")
     All <<- lapply(filenames,function(i){
-      read.csv(i, sep = ",",quote = "\"", dec = ",", fill = TRUE, comment.char = "")
+      read.csv(i, sep = ",",quote = "\"", dec = ",", fill = TRUE, comment.char = "",encoding=DEncode)
     })
     l_All<<-length(All)
   }

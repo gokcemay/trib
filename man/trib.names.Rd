@@ -6,14 +6,16 @@
 files in working directory and stores table values to a global variabla All,
 filenames to global variabla filenames and returns truncated names of files.}
 \usage{
-trib.names(x, DataFF = TRUE)
+trib.names(x, DataFF = TRUE, DEncode = "UTF-8")
 }
 \arguments{
 \item{x}{Numeric value length of file name for truncation. Truncated file
 name is given at output for ease of use.}
 
 \item{DataFF}{logical scalar, checking whether to use CSV style for
-  Tribometer of Profilometer}
+Tribometer of Profilometer}
+
+\item{DEncode}{is a string that specifies file encoding for import}
 }
 \value{
 returns truncated file names, also generates list All and filenames

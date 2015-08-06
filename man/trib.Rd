@@ -4,9 +4,9 @@
 \name{trib}
 \alias{trib}
 \alias{trib-package}
-\title{trib: A Package for Analysing and Visualizing Tribology Measurements}
+\title{trib: Analysing and Visualizing Tribology Measurements}
 \description{
-The trib package provides three important functions: CoF, FF and profile. The
+trib provides three important functions: CoF, FF and profile. The
 function names is used for file import.
 }
 \section{trib Functions}{

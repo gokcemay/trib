@@ -1,6 +1,6 @@
-#' trib: A Package for Analysing and Visualizing Tribology Measurements
+#' trib: Analysing and Visualizing Tribology Measurements
 #'
-#' The trib package provides three important functions: CoF, FF and profile. The
+#' trib provides three important functions: CoF, FF and profile. The
 #' function names is used for file import.
 #'
 #' @section trib Functions:

@@ -1,1 +1,6 @@
 exportPattern("^[[:alpha:]]+")
+importFrom("graphics", "barplot", "legend", "lines", "plot", "points",
+             "polygon", "text")
+  importFrom("stats", "filter")
+  importFrom("utils", "read.csv")
+  importFrom("zoo","rollmean")

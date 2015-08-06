@@ -154,9 +154,9 @@ trib.CoF <- function(x) { #gets file name length input returns coeficient of fri
 #plot tribometer plots
 trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file name length x and gets filter value y , Combined Graph and Single Graph
 
-  namesAll<-trib.names(x)
+      namesAll<-trib.names(x)
 
-  fltN <- y                           #filter value
+  fltN <- filterValue                           #filter value
   flt1 <- rep(1/fltN,fltN)
   flt2 <- rep(1/(fltN+1),fltN+1)
 
@@ -182,7 +182,7 @@ trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file n
   if (SingleGraph){
   for (i in 1:l_All){
 
-    plot(filter(All[[i]]$Distance,flt1, sides=1),filter(All[[i]]$FrictionForce, flt1, sides=1),pch='.',col=i,xlab='Distance (m)',ylab = 'Friction Force (N)',xlim=c(0,85),ylim=c(0,2))
+    plot(filter(All[[i]]$Distance,flt1, sides=1),filter(All[[i]]$FrictionForce, flt1, sides=1),pch='.',col=i,xlab='Distance (m)',ylab = 'Friction Force (N)',xlim=xlim,ylim=c(0,2))
     legend("topright", legend= namesAll[i],col=c(1:l_All),pch=16,cex=.5)
 
   }
@@ -235,7 +235,7 @@ trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file n
 #' Set work directory to file containing example data
 #' for profilometer directory should be
 #' @examples
-#' setwd(paste(path.package("trib"),"/exdata/profilometer",sep=""))
+#' setwd(paste(path.package("trib"),"/exdata/profile",sep=""))
 #'
 #' trib.profile(2,100,3)
 #'
@@ -251,7 +251,6 @@ trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file n
 #Profilometer
 
 trib.profile <- function(x,filterValue,r,CombinedTrack=TRUE,SingleTrack=TRUE,FullProfile=FALSE,WTVBar=TRUE) { #get file name length x and filter value y, plot combined wear track, plot single wear track, plot Full profile, plot bar graph of Wear Track Volume
-  library(zoo)
 
 namesAll <<- trib.names(x,DataFF = FALSE)       #get file names
 PosProfile <- data.frame(P1 = numeric(l_All),P2 = numeric(l_All))         #Wear Track dataframe for plot

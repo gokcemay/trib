@@ -1,13 +1,13 @@
 Package: trib
 Type: Package
-Title: A Package for Analysing and Visualizing Tribology Measurements
+Title: Analysing and Visualizing Tribology Measurements
 Version: 1.0.0
 Date: 2015-08-03
 Authors@R: c(person("Gokce Mehmet", "AY", role = c("aut", "cre"),
-		     email = "gmehmetay@gmail.com"), person("Osman Nuri","CELIK", role="ths", email = "oncelik@gmail.com"))
-Author: Gokce Mehmet AY [aut, cre]
+		     email = "gmehmetay@gmail.com"), person("Osman Nuri","CELIK", role="ths", email = "celikon@gmail.com"))
+Author: Gokce Mehmet AY [aut, cre], Osman Nuri CELIK [ths]
 Maintainer: Gokce Mehmet AY <gmehmetay@gmail.com>
-Description: Tribology test devices such as pin-on-disk, ball-on-disk machines and profilometers give important data for tribological analysis. This package is built to analyze and visualys that data into human understandable form. It has functions for finding coefficient of friction, Friction Force vs Distance graphs and calculating Wear Track Volume and Wear Track plotting.
+Description: Tribology test devices such as pin-on-disk, ball-on-disk machines and profilometers give important data for tribological analysis. trib is built to analyze and visualys that data into human understandable form. It has functions for finding coefficient of friction, Friction Force vs Distance graphs and calculating Wear Track Volume and Wear Track plotting.
 License: GPL-3
 LazyData: TRUE
 Imports: zoo

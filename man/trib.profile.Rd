@@ -64,7 +64,7 @@ generates WTArea global variable
  WTArea vector to calculate Wear Track Volume
 }
 \examples{
-setwd(paste(path.package("trib"),"/exdata/profilometer",sep=""))
+setwd(paste(path.package("trib"),"/exdata/profile",sep=""))
 
 trib.profile(2,100,3)
 

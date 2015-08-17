@@ -47,25 +47,26 @@
 #Get sample names and import CSV
 
 trib.names <- function(x,DataFF=TRUE,DEncode="UTF-8") {   #give file name length returns names of files generates Global var All, l_All and filenames
-  filenames <<- list.files(pattern="*.csv")
+  filenames <- list.files(pattern="*.csv")
 
   if (DataFF){
-  All <<- lapply(filenames,function(i){
+  All <- lapply(filenames,function(i){
     read.csv(i, sep = "",quote = "\"", dec = ",", fill = TRUE, comment.char = "",encoding=DEncode)
   })
-  l_All <<- length(All)
+  l_All <- length(All)
 
 }
   else {
     filenames <- list.files(pattern="*.csv")
-    All <<- lapply(filenames,function(i){
+    All <- lapply(filenames,function(i){
       read.csv(i, sep = ",",quote = "\"", dec = ",", fill = TRUE, comment.char = "",encoding=DEncode)
     })
-    l_All<<-length(All)
+    l_All<-length(All)
   }
   namesAll<-substr(filenames,start=1,stop=x)      #set column names
+tribOut <- list(data=All,names=namesAll)
 
-  return(namesAll)
+  return(tribOut)
 }
 
 #' \code{trib.CoF} gets file name length and returns coeficient of friction in
@@ -84,6 +85,7 @@ trib.names <- function(x,DataFF=TRUE,DEncode="UTF-8") {   #give file name length
 #'
 #' @param x Numeric value length of file name for truncation. Truncated file
 #'   name is given at output for ease of use.
+#' @param DATAOUT logical scalar checking whether give data out or not
 #' @return Plots a bar plot of Coeficient of Friction generated from all files
 #'   in working directory and generates a vector called CF that contains Average
 #'   Coefficient of Friction values
@@ -93,14 +95,17 @@ trib.names <- function(x,DataFF=TRUE,DEncode="UTF-8") {   #give file name length
 #' @examples
 #' setwd(paste(path.package("trib"),"/exdata/tribometer",sep=""))
 #' trib.CoF(2)
-#'
+#' tribDATA<-trib.CoF(2,DATAOUT = TRUE)
 
 
 #plot Average Coeficient of Friction
-trib.CoF <- function(x) { #gets file name length input returns coeficient of friction in bar plot generates global var CF
+trib.CoF <- function(x,DATAOUT=FALSE) { #gets file name length input returns coeficient of friction in bar plot generates global var CF
 
-  namesAll<-trib.names(x)
-  CF <<- vector(mode = "numeric")     #generate vector for values
+  tribAll<-trib.names(x)
+  All<-tribAll$data
+  namesAll<-tribAll$names
+  l_All<-length(All)
+  CF <- vector(mode = "numeric")     #generate vector for values
   for (i in 1:l_All){
 
     CF[i]<-mean(All[[i]][[4]])}             #get all coefficient of friction data into CF
@@ -109,6 +114,10 @@ trib.CoF <- function(x) { #gets file name length input returns coeficient of fri
   barplot(CF,main="Average Friction Coefficient",
           xlab="Samples",ylab="CoF",xlim=c(0,length(CF)*1.25+1), ylim = c(0,1.2*max(CF)),col=c(1:l_All))    #generate bar plot
   legend("topright", legend=signif(CF,6),col=c(1:l_All),pch=16,cex=0.8)                                 #add legends
+
+  if (DATAOUT){
+    return(CF)
+  }
 
   }
 
@@ -155,7 +164,10 @@ trib.CoF <- function(x) { #gets file name length input returns coeficient of fri
 #plot tribometer plots
 trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file name length x and gets filter value y , Combined Graph and Single Graph
 
-      namesAll<-trib.names(x)
+  tribAll<-trib.names(x)
+  All<-tribAll$data
+  namesAll<-tribAll$names
+  l_All<-length(All)
 
   fltN <- filterValue                           #filter value
   flt1 <- rep(1/fltN,fltN)
@@ -253,16 +265,21 @@ trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file n
 
 trib.profile <- function(x,filterValue,r,CombinedTrack=TRUE,SingleTrack=TRUE,FullProfile=FALSE,WTVBar=TRUE) { #get file name length x and filter value y, plot combined wear track, plot single wear track, plot Full profile, plot bar graph of Wear Track Volume
 
-namesAll <<- trib.names(x,DataFF = FALSE)       #get file names
+tribAll<-trib.names(x,DataFF = FALSE)
+All<-tribAll$data
+namesAll<-tribAll$names
+l_All<-length(All)
+filenames<-namesAll
+
 PosProfile <- data.frame(P1 = numeric(l_All),P2 = numeric(l_All))         #Wear Track dataframe for plot
 NicePosProfile <- data.frame(P1 = numeric(l_All),P2 = numeric(l_All))      #Averaged out
-WTArea <<- matrix(,nrow = 1, ncol=l_All)         #Wear Track matrix for plot
+WTArea <- matrix(,nrow = 1, ncol=l_All)         #Wear Track matrix for plot
 fltN <- filterValue                               #lag
 flt1 <- rep(1/fltN,fltN)          # Filter
 
 for (i in 1: length(filenames)){
   EndV<-length(All[[i]]$Profile)-1        # Set End point
-  ProfileFiltered<<- filter(All[[i]]$Profile,flt1,sides=1) #filter profile
+  ProfileFiltered<- filter(All[[i]]$Profile,flt1,sides=1) #filter profile
 
   MinF <- min(ProfileFiltered,na.rm=TRUE)   #Find filtered min
   PMinF <- match(MinF,ProfileFiltered)      # Get position of filtered min

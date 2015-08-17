@@ -5,11 +5,13 @@
 \title{\code{trib.CoF} gets file name length and returns coeficient of friction in
 bar plot generates global var CF}
 \usage{
-trib.CoF(x)
+trib.CoF(x, DATAOUT = FALSE)
 }
 \arguments{
 \item{x}{Numeric value length of file name for truncation. Truncated file
 name is given at output for ease of use.}
+
+\item{DATAOUT}{logical scalar checking whether give data out or not}
 }
 \value{
 Plots a bar plot of Coeficient of Friction generated from all files
@@ -38,5 +40,6 @@ bar plot generates global var CF
 \examples{
 setwd(paste(path.package("trib"),"/exdata/tribometer",sep=""))
 trib.CoF(2)
+tribDATA<-trib.CoF(2,DATAOUT = TRUE)
 }
 

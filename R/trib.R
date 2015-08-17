@@ -1,4 +1,4 @@
-#' trib: Analysing and Visualizing Tribology Measurements
+#' Tribology Measurement Analysis and Visualization
 #'
 #' trib provides three important functions: CoF, FF and profile. The
 #' function names is used for file import.

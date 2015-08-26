@@ -274,6 +274,7 @@ filenames<-namesAll
 PosProfile <- data.frame(P1 = numeric(l_All),P2 = numeric(l_All))         #Wear Track dataframe for plot
 NicePosProfile <- data.frame(P1 = numeric(l_All),P2 = numeric(l_All))      #Averaged out
 WTArea <- matrix(,nrow = 1, ncol=l_All)         #Wear Track matrix for plot
+names(WTArea) <- namesAll
 fltN <- filterValue                               #lag
 flt1 <- rep(1/fltN,fltN)          # Filter
 
@@ -353,8 +354,10 @@ for (i in 1: length(filenames)){
 
 r <- r #mm radius
 WTVol <- WTArea*pi*r*2 # Wear Track Formula
+names(WTVol) <- namesAll
+
   if (WTVBar){
-    barplot(t(as.matrix(WTVol)), beside = TRUE, main = "Wear Track Volume", xlab = "Sample", ylab = "Volume (mm3)",col=c(1:l_All), ylim = range(0,max(WTVol)*1.4),names.arg = colnames(WTVol) )
+    barplot(t(as.matrix(WTVol)), beside = TRUE, main = "Wear Track Volume", xlab = "Sample", ylab = "Volume (mm3)",col=c(1:l_All), ylim = range(0,max(WTVol)*1.4),names.arg = names(WTVol) )
 
     for (i in 1: length(filenames)){
       text(i+0.5,WTVol[1,i]*1.3,signif(WTVol[1,i],4))

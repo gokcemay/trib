@@ -46,25 +46,37 @@
 
 #Get sample names and import CSV
 
-trib.names <- function(x,DataFF=TRUE,DEncode="UTF-8") {   #give file name length returns names of files generates Global var All, l_All and filenames
+trib.names <- function(x,DataFF=1,DEncode="UTF-8") {   #give file name length returns names of files generates Global var All, l_All and filenames
   filenames <- list.files(pattern="*.csv")
-
-  if (DataFF){
+#Check for DataFF to set csv style
+  if (DataFF == 1){
   All <- lapply(filenames,function(i){
     read.csv(i, sep = "",quote = "\"", dec = ",", fill = TRUE, comment.char = "",encoding=DEncode)
   })
-  l_All <- length(All)
 
-}
+  }
   else {
+  if (DataFF == 2) {
+    All <- lapply(filenames, function(i) {
+      read.csv(i, sep = "\t", quote = "\t", dec = ".", fill = TRUE,
+               comment.char = "", encoding = DEncode)
+    })
+  }
+  else {
+    if (DataFF == 3){
     filenames <- list.files(pattern="*.csv")
     All <- lapply(filenames,function(i){
       read.csv(i, sep = ",",quote = "\"", dec = ",", fill = TRUE, comment.char = "",encoding=DEncode)
     })
-    l_All<-length(All)
+    }
+
+    else {stop('DataFF not between 1 and 3')}
   }
-  namesAll<-substr(filenames,start=1,stop=x)      #set column names
-tribOut <- list(data=All,names=namesAll)
+  }
+
+l_All <- length(All)
+namesAll<-substr(filenames,start=1,stop=x)      #set column names
+tribOut <- list(data=All,names=namesAll)        #Send out
 
   return(tribOut)
 }
@@ -162,7 +174,7 @@ trib.CoF <- function(x,DATAOUT=FALSE) { #gets file name length input returns coe
 #' trib.FF(2, 100, SingleGraph=FALSE)
 
 #plot tribometer plots
-trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file name length x and gets filter value y , Combined Graph and Single Graph
+trib.FF <- function (x, filterValue, CombinedGraph = TRUE, SingleGraph = TRUE) { #file name length x and gets filter value y , Combined Graph and Single Graph
 
   tribAll<-trib.names(x)
   All<-tribAll$data
@@ -172,16 +184,28 @@ trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file n
   fltN <- filterValue                           #filter value
   flt1 <- rep(1/fltN,fltN)
   flt2 <- rep(1/(fltN+1),fltN+1)
+  maxD <- vector(mode = "numeric")                # Maximum distance
+  maxF <- vector(mode = "numeric")               # Maximum Friction Force
+  maxCoF <- vector(mode = "numeric")             # Maximum CoF
 
-  maxD<-vector(mode = "numeric")
-  for (i in 1:l_All){maxD[i]<-max(All[[i]]$Distance)}
-  xlim<-c(0,max(maxD)*1.25)
+  for (i in 1:l_All) {
+    maxD[i] <- max(All[[i]]$Distance)
+    maxF[i] <- max(All[[i]]$FrictionForce, flt1, sides = 1)
+    maxCoF[i] <- max(All[[i]]$mu)
+  }
+
+  xlim <- c(0, max(maxD) * 1.05)
+  ylimF <- c(0,max(maxF))
+  ylimCoF <- c(0,max(maxCoF))
 
 
 
   #All
   if (CombinedGraph){
-  plot(100,xlab='Distance (m)',ylab = 'Friction Force (N)',xlim=xlim,ylim=c(0,2))
+    plot(100, xlab = "Distance (m)", ylab = "Friction Force (N)",
+         xlim = xlim, ylim = ylimF)
+
+    #Friction Force Plot
 
   for (i in 1:l_All){
 
@@ -190,8 +214,30 @@ trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file n
 
   }
   legend("topright", legend= namesAll,col=c(1:l_All),pch=c(1:l_All),cex=.5)
+
+  #Coefficient of Friction Plot
+
+  plot(100, xlab = "Distance (m)", ylab = "Coefficient of Friction",
+       xlim = xlim, ylim = ylimCoF)
+
+  for (i in 1:l_All) {
+    points(filter(All[[i]]$Distance, flt1, sides = 1),
+           filter(All[[i]]$mu, flt1, sides = 1),
+           pch = ".", col = i)
+    points(filter(All[[i]]$Distance, flt1, sides = 1)[length(filter(All[[i]]$Distance,
+                                                                    flt1, sides = 1))], filter(All[[i]]$mu,
+                                                                                               flt1, sides = 1)[length(filter(All[[i]]$mu,
+                                                                                                                              flt1, sides = 1))], pch = i, col = i, cex = 1)
   }
-  #Plot each alone
+  legend("topright", legend = namesAll, col = c(1:l_All),
+         pch = c(1:l_All), cex = 0.5)
+
+  }
+
+
+
+
+   #Plot each alone
   if (SingleGraph){
   for (i in 1:l_All){
 
@@ -199,7 +245,18 @@ trib.FF <- function(x,filterValue,CombinedGraph=TRUE,SingleGraph=TRUE) { #file n
     legend("topright", legend= namesAll[i],col=c(1:l_All),pch=16,cex=.5)
 
   }
+    for (i in 1:l_All) {
+      plot(filter(All[[i]]$Distance, flt1, sides = 1),
+           filter(All[[i]]$mu, flt1, sides = 1),
+           pch = ".", col = i, xlab = "Distance (m)", ylab = "Coefficient of Friction",
+           xlim = xlim, ylim = ylimCoF)
+      legend("topright", legend = namesAll[i], col = c(1:l_All),
+             pch = 16, cex = 0.5)
+    }
   }
+
+
+
 }
 
 
